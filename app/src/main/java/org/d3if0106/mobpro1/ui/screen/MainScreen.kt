@@ -1,5 +1,6 @@
 package org.d3if0106.mobpro1.ui.screen
 
+
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,12 +41,12 @@ fun MainScreen() {
 fun ScreenContent(modifier: Modifier){
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+            .fillMaxSize().padding(16.dp)
     ){
 
     }
 }
+
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
