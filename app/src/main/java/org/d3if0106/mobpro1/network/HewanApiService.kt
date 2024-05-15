@@ -29,4 +29,7 @@ object HewanApi {
     val service: HewanApiService by lazy {
         retrofit.create(HewanApiService::class.java)
     }
+    fun getHewanUrl(imageId: String): String{
+        return "$BASE_URL$imageId.jpg"
+    }
 }
