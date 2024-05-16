@@ -90,13 +90,15 @@ fun ListItem(hewan: Hewan) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-                .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f))
-                .padding(4.dp)
+
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
+                .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f))
+                .padding(4.dp)
+
         ) {
             Text(
                 text = hewan.nama,
