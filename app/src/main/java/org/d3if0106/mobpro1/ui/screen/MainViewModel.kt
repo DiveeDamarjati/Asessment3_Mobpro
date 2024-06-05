@@ -30,15 +30,12 @@ class MainViewModel : ViewModel() {
     var status = MutableStateFlow(ApiStatus.LOADING)
         private set
 
-    init {
-        retriveData()
-    }
 
-    fun retriveData() {
+    fun retriveData(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             status.value = ApiStatus.LOADING
             try {
-                data.value = HewanApi.service.getHewan()
+                data.value = HewanApi.service.getHewan(userId)
                 status.value = ApiStatus.SUCCESS
             } catch (e: Exception) {
                 Log.d("MainViewModel", "Failure: ${e.message}")
@@ -70,7 +67,7 @@ class MainViewModel : ViewModel() {
                     bitmap.toMultipartBody()
                 )
                 if (result.status == "success")
-                    retriveData()
+                    retriveData(userId)
                 else
                     throw Exception(result.message)
             } catch (e:Exception) {
