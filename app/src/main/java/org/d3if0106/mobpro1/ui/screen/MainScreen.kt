@@ -96,11 +96,15 @@ fun MainScreen() {
     var showDialog by remember {
         mutableStateOf(false)
     }
+    var showHewanDialog by remember {
+        mutableStateOf(false)
+    }
     var bitmap: Bitmap? by remember {
         mutableStateOf(null)
     }
     val launcher = rememberLauncherForActivityResult( CropImageContract()) {
         bitmap = getCroppedImgage(context.contentResolver, it)
+        if (bitmap != null) showHewanDialog = true
     }
     
     Scaffold(
@@ -158,7 +162,13 @@ fun MainScreen() {
                 showDialog = false
             }
         }
-
+        if (showHewanDialog) {
+            HewanDialog(
+                bitmap = bitmap,
+                onDissmissRequest = { showHewanDialog = false }) {nama, namaLatin -> Log.d("TAMBAH", "$nama $namaLatin ditambahkan.")
+                showHewanDialog = false
+            }
+        }
     }
 }
 
