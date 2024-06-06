@@ -75,4 +75,20 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteData(userId: String, id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = HewanApi.service.deleteHewan(userId, id)
+                if (result.status == "success")
+                    retriveData(userId)
+                else
+                    throw Exception(result.message)
+            } catch (e: Exception) {
+                Log.d("MainViewModel", "Failure: ${e.message}")
+                errorMessage.value = "Error: ${e.message}"
+            }
+        }
+    }
+
 }

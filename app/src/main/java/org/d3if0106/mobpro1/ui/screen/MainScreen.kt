@@ -18,15 +18,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -57,6 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -206,8 +211,8 @@ fun ScreenContent(viewModel: MainViewModel, userId:String, modifier: Modifier){
                     .padding(4.dp),
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 80.dp)
-            ){
-                items(data) { ListItem(hewan = it)}
+            ) {
+                items(data) { ListItem(hewan = it, viewModel = viewModel, userId = userId) }
             }
         }
         ApiStatus.FAILED -> {
@@ -230,50 +235,110 @@ fun ScreenContent(viewModel: MainViewModel, userId:String, modifier: Modifier){
 }
 
 @Composable
-fun ListItem(hewan: Hewan) {
-    Box (
+fun ListItem(hewan: Hewan, viewModel: MainViewModel, userId: String){
+    var showDialogDelete by remember { mutableStateOf(false) }
+    Box(
         modifier = Modifier
             .padding(4.dp)
             .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter
-    ) {
+    ){
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
+            model =ImageRequest.Builder(LocalContext.current)
                 .data(HewanApi.getHewanUrl(hewan.imageId))
                 .crossfade(true)
                 .build(),
-            contentDescription = stringResource(id = R.string.gambar, hewan.nama),
+            contentDescription = stringResource(R.string.gambar, hewan.nama),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.loading_img),
             error = painterResource(id = R.drawable.baseline_broken_image_24),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-
         )
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-                .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f))
-                .padding(4.dp)
-
+                .background(Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f)),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = hewan.nama,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Text(
-                text = hewan.namaLatin,
-                fontStyle = FontStyle.Italic,
-                fontSize = 14.sp,
-                color = Color.White
-            )
+            Column {
+                Text(
+                    text = hewan.nama,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = hewan.namaLatin,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
+            IconButton(onClick = { showDialogDelete = true } ) {
+                if (hewan.mine == 1) {
+                    IconButton(onClick = {
+                        showDialogDelete = true;
+                    }) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                        if (showDialogDelete) {
+                            DeleteDialog(
+                                onDismissRequest = { showDialogDelete = false }) {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    viewModel.deleteData(
+                                        userId,
+                                        hewan.id
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+
     }
 }
 
+@Composable
+fun DeleteDialog(
+    onDismissRequest: () -> Unit,
+    onDelete: () -> Unit
+){
+    Dialog(onDismissRequest = { onDismissRequest() },) {
+        Card(
+            modifier = Modifier.padding(16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text(text = "Apakah kamu yakin ingin menghapus ini?")
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = { onDismissRequest() },
+                        modifier = Modifier.padding(end = 16.dp)
+                    ) {
+                        Text(text = "Tidak")
+                    }
+                    Button(
+                        onClick = { onDelete() },
+                        modifier = Modifier.padding(end = 5.dp)
+                    ) {
+                        Text(text = "Iya")
+                    }
+
+                }
+            }
+        }
+    }
+}
 private suspend fun signIn(context: Context, dataStore: UserDataStore) {
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
         .setFilterByAuthorizedAccounts(false)
