@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Informasi Makanan</string>
     <string name="about">Tentang Aplikasi</string>
-    <string name="copyright">Isi about disini</string>
+    <string name="copyright">Aplikasi informasi makanan khas daerah seluruh provinsi indonesia</string>
     <string name="tambah_makanan">Tambah Makanan</string>
     <string name="profil">Profil</string>
     <string name="nama">Nama Makanan</string>
