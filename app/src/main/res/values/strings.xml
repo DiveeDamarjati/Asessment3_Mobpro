@@ -1,15 +1,24 @@
 <resources>
-    <string name="app_name">Mobpro1</string>
-    <string name="gambar">Gambar %1$s</string>
-    <string name="error">Gagal memuat data.. Koneksi error</string>
-    <string name="try_again">Coba lagi</string>
+    <string name="app_name">Informasi Makanan</string>
+    <string name="about">Tentang Aplikasi</string>
+    <string name="copyright">Isi about disini</string>
+    <string name="tambah_makanan">Tambah Makanan</string>
     <string name="profil">Profil</string>
-    <string name="tutup">Tutup</string>
-    <string name="logout">logout</string>
-    <string name="tambah_hewan">Tambah hewan</string>
-    <string name="nama">Nama</string>
-    <string name="nama_latin">Nama latin</string>
+    <string name="nama">Nama Makanan</string>
+    <string name="asal">Asal Makanan</string>
+    <string name="gambar">Gambar %1$s</string>
+    <string name="asal_mana">Asal:</string>
+    <string name="error">Gagal memuat data.. Koneksi error.</string>
+    <string name="konfirmasi_hapus">Yakin ingin menghapus?</string>
+    <string name="list">Tampilan list</string>
+    <string name="grid">Tampilan grid</string>
     <string name="batal">Batal</string>
     <string name="simpan">Simpan</string>
+    <string name="kembali">Kembali</string>
+    <string name="tutup">Tutup</string>
+    <string name="logout">Logout</string>
     <string name="hapus">Hapus</string>
+    <string name="bagikan">Bagikan</string>
+    <string name="try_again">Coba lagi</string>
+    <string name="template_bagikan">Apakah kamu tau? Makanan %1$s berasal dari %2$s loh!</string>
 </resources>
